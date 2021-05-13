@@ -99,75 +99,34 @@ class GameState():
     '''
 
     def getRookMoves(self, r, c, moves):
-        if self.whiteToMove:  # white rook moves
-            for j in range(c + 1, len(self.board[r])):  # check right
-                if self.board[r][j] != "--":  # if space not empty break for loop
-                    if self.board[r][j][0] == 'b':  # if black piece blocking, capture, else, break
-                        print("ADDED CAPTURE PIECE ROOK")
-                        moves.append(Move((r, c), (r, j), self.board))
+        directions = ((-1,0), (0,-1),(1,0),(0,1))
+        enemyColor = "b" if self.whiteToMove else "w"
+        for d in directions:
+            for i in range(1, 8):
+                endRow = r + d[0] * i
+                endCol = c + d[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8: # on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--": #empty space
+                        moves.append(Move((r,c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor: #enemy piece
+                        moves.append(Move((r,c), (endRow, endCol), self.board))
+                        break
+                    else: #friendly piece
+                        break
+                else: #off board
                     break
-                moves.append(Move((r, c), (r, j), self.board))
-
-            for j in range(c-1, -1, -1):  # check left
-                if self.board[r][j] != "--":
-                    if self.board[r][j][0] == 'b':
-                        moves.append(Move((r, c), (r, j), self.board))
-                    break
-                moves.append(Move((r, c), (r, j), self.board))
-
-            for i in range(r + 1, len(self.board)):  # check below
-                if self.board[i][c] != "--":
-                    if self.board[i][c][0] == 'b':
-                        moves.append(Move((r, c), (i, c), self.board))
-                    break
-                moves.append(Move((r, c), (i, c), self.board))
-
-            for i in range(r-1, -1, -1):  # check above
-                if self.board[i][c] != "--":
-                    if self.board[i][c][0] == 'b':
-                        moves.append(Move((r, c), (i, c), self.board))
-                    break
-                moves.append(Move((r, c), (i, c), self.board))
-        else: #black rook moves
-            for j in range(c + 1, len(self.board[r])):  # check right
-                if self.board[r][j] != "--":  # if space not empty break for loop
-                    if self.board[r][j][0] == 'w':  # if white piece blocking, capture, else, break
-                        print("ADDED CAPTURE PIECE ROOK")
-                        moves.append(Move((r, c), (r, j), self.board))
-                    break
-                moves.append(Move((r, c), (r, j), self.board))
-
-            for j in range(c-1, -1, -1):  # check left
-                if self.board[r][j] != "--":
-                    if self.board[r][j][0] == 'w':
-                        moves.append(Move((r, c), (r, j), self.board))
-                    break
-                moves.append(Move((r, c), (r, j), self.board))
-
-            for i in range(r + 1, len(self.board)):  # check below
-                if self.board[i][c] != "--":
-                    if self.board[i][c][0] == 'w':
-                        moves.append(Move((r, c), (i, c), self.board))
-                    break
-                moves.append(Move((r, c), (i, c), self.board))
-
-            for i in range(r-1, -1, -1):  # check above
-                if self.board[i][c] != "--":
-                    if self.board[i][c][0] == 'w':
-                        moves.append(Move((r, c), (i, c), self.board))
-                    break
-                moves.append(Move((r, c), (i, c), self.board))
 
     '''
-        Get all the Knight moves for the rook located at row, col adn add these moves to the list
-        '''
+    Get all the Knight moves for the rook located at row, col adn add these moves to the list
+    '''
 
     def getKnightMoves(self, r, c, moves):
         pass
 
     '''
-        Get all the Bishop moves for the rook located at row, col adn add these moves to the list
-        '''
+    Get all the Bishop moves for the rook located at row, col adn add these moves to the list
+    '''
 
     def getBishopMoves(self, r, c, moves):
         pass
