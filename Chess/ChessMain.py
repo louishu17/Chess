@@ -60,11 +60,11 @@ def main():
                     print(move.getChessNotation())
                     if move in validMoves:
                         gs.makeMove(move)
-                        print()
                         moveMade = True
-                    sqSelected = () # reset user clicks
-                    playerClicks = []
-
+                        sqSelected = () # reset user clicks
+                        playerClicks = []
+                    else:
+                        playerClicks = [sqSelected]
             #key Handlers
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #undo when 'z' is pressed
