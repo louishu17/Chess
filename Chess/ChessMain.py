@@ -60,6 +60,7 @@ def main():
                     print(move.getChessNotation())
                     if move in validMoves:
                         gs.makeMove(move)
+                        print()
                         moveMade = True
                     sqSelected = () # reset user clicks
                     playerClicks = []
