@@ -29,7 +29,10 @@ class GameState():
         self.blackKingLocation = (0, 4)
         self.checkMate = False
         self.staleMate = False
-
+        
+    '''
+    Takes a move as a parameter and executes it
+    '''
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
         self.board[move.endRow][move.endCol] = move.pieceMoved
@@ -40,6 +43,11 @@ class GameState():
             self.whiteKingLocation = (move.endRow, move.endCol)
         elif move.pieceMoved == 'bK':
             self.blackKingLocation = (move.endRow, move.endCol)
+
+        # pawn promotion
+        if move.isPawnPromotion:
+            self.board[move.endRow][move.endCol] = move.pieceMoved[0] + 'Q'
+
 
     '''
     undo the last move made
@@ -213,16 +221,16 @@ class GameState():
                     break
 
     '''
-        Get all the Queen moves for the rook located at row, col adn add these moves to the list
-        '''
+    Get all the Queen moves for the rook located at row, col adn add these moves to the list
+    '''
 
     def getQueenMoves(self, r, c, moves):
         self.getRookMoves(r, c, moves)
         self.getBishopMoves(r, c, moves)
 
     '''
-        Get all the King moves for the rook located at row, col adn add these moves to the list
-        '''
+    Get all the King moves for the rook located at row, col adn add these moves to the list
+    '''
 
     def getKingMoves(self, r, c, moves):
         directions = ((-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1))
@@ -253,6 +261,9 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.isPawnPromotion = False
+        if (self.pieceMoved == 'wp' and self.endRow == 0) or (self.pieceMoved == 'bp' and self.endRow == 7):
+            self.isPawnPromotion = True
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
 
     '''
