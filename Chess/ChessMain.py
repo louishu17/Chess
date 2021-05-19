@@ -182,7 +182,7 @@ def animateMove(move, screen, board, clock):
         screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
         p.display.flip()
         clock.tick(60)
-
+        #tests 
 def drawText(screen, text):
     font = p.font.SysFont("Helvicta",32 ,True, False)
     textObject = font.render(text, 0, p.Color('Gray'))
