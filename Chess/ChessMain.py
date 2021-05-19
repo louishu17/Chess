@@ -3,7 +3,7 @@ This is our main drive file. It will be responsible for handling user input and 
 """
 
 import pygame as p
-from Chess import ChessEngine
+from Chess import ChessEngine, SmartMoveFinder
 
 WIDTH = HEIGHT = 512
 DIMENSION = 8  # dimensions of a chess board are 8x8
@@ -41,13 +41,16 @@ def main():
     sqSelected = () #no square is selected initially, keep track of the last click of the user (tupe: (row, col))
     playerClicks = [] #keep track of player clicks {two tuples: [(6,4), (4.4)])
     gameOver = False
+    playerOne = False #if a human is playing white, then this will be true. If ai playing it will be false
+    playerTwo = False #Same as above but for black
     while running:
+        humanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             #mouse handler
             elif e.type == p.MOUSEBUTTONDOWN:
-                if not gameOver:
+                if not gameOver and humanTurn:
                     location = p.mouse.get_pos()  # (x,y) location of mouse
                     col = location[0] // SQ_SIZE
                     row = location[1] // SQ_SIZE
@@ -82,6 +85,15 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
+
+        #AI move finder
+        if not gameOver and not humanTurn:
+            AIMove = SmartMoveFinder.findRandomMove(validMoves)
+            gs.makeMove(AIMove)
+            moveMade = True
+            animate = True
+
+
         if moveMade:
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
@@ -182,7 +194,7 @@ def animateMove(move, screen, board, clock):
         screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
         p.display.flip()
         clock.tick(60)
-        #tests 
+        #tests
 def drawText(screen, text):
     font = p.font.SysFont("Helvicta",32 ,True, False)
     textObject = font.render(text, 0, p.Color('Gray'))
