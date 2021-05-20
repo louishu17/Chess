@@ -115,6 +115,9 @@ class GameState():
                 else: #queenside
                     self.board[move.endRow][move.endCol-2] = self.board[move.endRow][move.endCol+1]
                     self.board[move.endRow][move.endCol+1] = '--'
+
+            self.checkmate = False
+            self.stalemate = False
     '''
     Update the castle rights given the move
     '''
@@ -145,9 +148,6 @@ class GameState():
 
     def getValidMoves(self):
 
-        for log in self.castleRightsLog:
-            print(log.wks, log.wqs, log.bks, log.bqs, end=", ")
-        print()
         tempEnpassantPossible = self.enpassantPossible
         tempCastleRights = CastleRights(self.currentCastlingRight.wks, self.currentCastlingRight.bks,
                                         self.currentCastlingRight.wqs, self.currentCastlingRight.bqs) #copy the current castling rights
