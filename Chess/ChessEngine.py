@@ -30,6 +30,7 @@ class GameState():
         self.checkmate = False
         self.stalemate = False
         self.enpassantPossible = ()  # coords for the square where en passant capture is possible
+        self.enPassantPossibleLog = [self.enpassantPossible]
         self.currentCastlingRight = CastleRights(True, True, True, True)
         self.castleRightsLog = [CastleRights(self.currentCastlingRight.wks, self.currentCastlingRight.bks,
                                              self.currentCastlingRight.wqs, self.currentCastlingRight.bqs)]
@@ -72,6 +73,8 @@ class GameState():
                 self.board[move.endRow][move.endCol + 1] = self.board[move.endRow][move.endCol - 2]  # moves the rook
                 self.board[move.endRow][move.endCol - 2] = '--'
 
+        self.enPassantPossibleLog.append(self.enpassantPossible)
+
         # update castling rights - whenever it is a rook or a king mvoe
         self.updateCastleRights(move)
         self.castleRightsLog.append(CastleRights(self.currentCastlingRight.wks, self.currentCastlingRight.bks,
@@ -97,11 +100,9 @@ class GameState():
             if move.isEnpassantMove:
                 self.board[move.endRow][move.endCol] = '--'  # leave landign square blank
                 self.board[move.startRow][move.endCol] = move.pieceCaptured
-                self.enpassantPossible = (move.endRow, move.endCol)
 
-            # undo a 2 square pawn advance
-            if move.pieceMoved[1] == 'p' and abs(move.startRow - move.endRow) == 2:
-                self.enpassantPossible = ()
+            self.enPassantPossiblelog.pop()
+            self.enPassantPossible = self.enPassantPossibleLog[-1]
 
             # undo castling rights
             self.castleRightsLog.pop()  # get rid of new castle rights from the move we are undoing
@@ -140,6 +141,19 @@ class GameState():
                 if move.startCol == 0:  # left black rook
                     self.currentCastlingRight.bqs = False
                 elif move.startCol == 7:  # right black rook
+                    self.currentCastlingRight.bks = False
+
+        if move.pieceCapture == 'wR':
+            if move.endRow == 7:
+                if move.endCol == 0:
+                    self.currentCastlingRight.wqs = False
+                elif move.endCol == 7:
+                    self.currentCastlingRight.wks = False
+        elif move.pieceCapture == 'bR':
+            if move.endRow == 0:
+                if move.endCol == 0:
+                    self.currentCastlingRight.bqs = False
+                elif move.endCol == 7:
                     self.currentCastlingRight.bks = False
 
     '''
