@@ -114,7 +114,7 @@ Helper method to make first recursive call
 '''
 
 
-def findBestMove(gs, validMoves):
+def findBestMove(gs, validMoves, returnQueue):
     global nextMove, counter
     nextMove = None
     random.shuffle(validMoves)
@@ -122,8 +122,7 @@ def findBestMove(gs, validMoves):
     # findMoveNegaMax(gs, validMoves, DEPTH, 1 if gs.whiteToMove else -1)
     findMoveNegaMaxAlphaBeta(gs, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if gs.whiteToMove else -1)
     print(counter)
-    return nextMove
-
+    returnQueue.put(nextMove)
 
 '''
 recursive minmax function
