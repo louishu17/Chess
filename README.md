@@ -3,7 +3,8 @@
 Chess Application for MultiPlayer or SinglePlayer
 
 # Run App
-
-git clone 
+```
+git clone https://github.com/louishu17/Chess.git
 
 python3 ChessMain.py
+```
