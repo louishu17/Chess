@@ -3,7 +3,7 @@ This is our main drive file. It will be responsible for handling user input and 
 """
 
 import pygame as p
-from Chess import ChessEngine, SmartMoveFinder
+import ChessEngine, SmartMoveFinder
 from multiprocessing import Process, Queue
 
 BOARD_WIDTH = BOARD_HEIGHT = 512
